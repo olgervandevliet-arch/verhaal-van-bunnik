@@ -6,7 +6,7 @@
 <title>Het Verhaal van Bunnik – Pieter van de Vliet</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Barlow+Condensed:wght@700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -33,9 +33,9 @@
   }
 
   .hero h1 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 800;
-    font-size: clamp(64px, 11vw, 116px);
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: 400;
+    font-size: clamp(80px, 15vw, 160px);
     line-height: 0.9;
     text-transform: uppercase;
     color: var(--dark);
@@ -43,7 +43,7 @@
 
   .hero h1 .subtitle-line {
     font-size: clamp(30px, 4.5vw, 50px);
-    font-weight: 700;
+    font-weight: 400;
     color: var(--green);
     display: block;
     margin-bottom: -4px;
@@ -176,7 +176,7 @@
   }
 
   blockquote.quote {
-    font-size: 17px;
+    font-size: 14px;
     font-style: italic;
     color: var(--dark);
     line-height: 1.7;
@@ -193,16 +193,18 @@
 
   .author-section {
     max-width: 760px;
-    margin: 0 auto;
-    padding: 0 24px 96px;
+    margin: 0 auto 96px;
+    padding: 40px;
+    background: rgba(42, 92, 39, 0.06);
+    border-radius: 8px;
     display: grid;
-    grid-template-columns: 220px 1fr;
+    grid-template-columns: 280px 1fr;
     gap: 48px;
     align-items: center;
   }
 
   .author-photo {
-    width: 220px;
+    width: 280px;
     height: auto;
     border-radius: 4px;
     display: block;
@@ -217,11 +219,12 @@
     .about { padding: 56px 20px; }
     .author-section {
       grid-template-columns: 1fr;
-      padding: 0 20px 64px;
-      gap: 28px;
+      margin: 0 20px 64px;
+      padding: 28px;
+      gap: 24px;
       text-align: center;
     }
-    .author-photo { width: 160px; margin: 0 auto; }
+    .author-photo { width: 200px; margin: 0 auto; }
   }
 </style>
 </head>
