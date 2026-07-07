@@ -241,6 +241,22 @@
     margin: 0;
   }
 
+  .cta-section {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 32px 24px 120px;
+    text-align: center;
+  }
+
+  .cta-section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: 400;
+    font-size: clamp(40px, 6vw, 60px);
+    line-height: 1.05;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
   @media (max-width: 768px) {
     .hero { padding: 88px 20px 48px; }
     .about { padding: 56px 20px; }
@@ -253,6 +269,7 @@
     }
     .author-text { padding: 32px 16px; }
     .author-photo { width: 200px; margin: 0 auto; }
+    .cta-section { padding: 24px 20px 80px; }
   }
 </style>
 </head>
@@ -269,14 +286,50 @@
     </p>
 
     <div class="signup">
-      <form class="signup-form" id="signup-form">
+      <form class="signup-form">
         <input type="email" placeholder="Jouw e-mailadres" required>
         <button type="submit">Geef een seintje</button>
       </form>
     </div>
-    <p class="signup-note" id="signup-note">
+    <p class="signup-note">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-      <span id="signup-note-text">Ontvang een bericht zodra het boek verschijnt.</span>
+      <span class="signup-note-text">Ontvang een bericht zodra het boek verschijnt.</span>
+    </p>
+  </section>
+
+  <img src="HVVB-mockup-1.jpg" alt="Het Verhaal van Bunnik" class="cover-image">
+
+  <section class="about">
+    <h2>3000 jaar terug in de tijd in Bunnik, Vechten, Rhijnauwen en Amelisweerd</h2>
+    <p>
+      Het verhaal van Bunnik gaat 3000 jaar terug in de tijd in Bunnik, Vechten, Rhijnauwen en Amelisweerd. Dit boek is een historische reconstructie en geeft een beeld van hoe hier alles is ontstaan en hoe het er in verschillende perioden heeft uitgezien.
+    </p>
+    <p>
+      Het verhaal van Bunnik is een verhaal van de rivier die lang haar eigen weg ging. Een verhaal van pioniers die zich vestigden op de hoger gelegen stroomruggen bij kruispunten van vaarwegen. Een verhaal van Romeinen die hier hun grootste castellum en haven bouwden. Een verhaal van de Utrechtse bisschoppen en de kerk. Een verhaal van de ontginningen. Een verhaal van ridderhofsteden en grootgrondbezitters. Een verhaal van hardwerkende boeren die hier een bestaan opbouwden en zorgden dat iedereen te eten had. Een verhaal van ambachtslieden en ondernemers. Een verhaal van een groeiend dorp dat toch een dorp bleef. Een verhaal in 400 pagina's, 15 hoofdstukken en ruim 500 afbeeldingen.
+    </p>
+  </section>
+
+  <section class="author-section">
+    <img src="pieter-van-de-vliet.jpg" alt="Pieter van de Vliet" class="author-photo">
+    <div class="author-text">
+      <blockquote class="quote">
+        "Hoe is dit alles ontstaan? Hoe was het hier vroeger? Van jongs af aan ben ik – mede dankzij inspirerende geschiedenisleraren – gefascineerd door deze vragen, net als kinderen die met verwondering door oude fotoboeken bladeren."
+        <cite>— Pieter van de Vliet</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Wil je weten wanneer het boek verschijnt?</h2>
+    <div class="signup">
+      <form class="signup-form">
+        <input type="email" placeholder="Jouw e-mailadres" required>
+        <button type="submit">Geef een seintje</button>
+      </form>
+    </div>
+    <p class="signup-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      <span class="signup-note-text">Ontvang een bericht zodra het boek verschijnt.</span>
     </p>
   </section>
 
@@ -309,57 +362,36 @@
       }
     }
 
-    document.getElementById('signup-form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      var form = this;
-      var note = document.getElementById('signup-note-text');
-      var email = form.querySelector('input[type="email"]').value;
-      var button = form.querySelector('button');
+    document.querySelectorAll('.signup-form').forEach(function (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var note = form.parentElement.nextElementSibling.querySelector('.signup-note-text');
+        var email = form.querySelector('input[type="email"]').value;
+        var button = form.querySelector('button');
 
-      button.disabled = true;
-      button.textContent = 'Bezig...';
+        button.disabled = true;
+        button.textContent = 'Bezig...';
 
-      fetch(SHEET_WEBHOOK_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: JSON.stringify({ email: email })
-      })
-        .then(function () {
-          note.textContent = 'Bedankt! We laten je weten zodra het boek verschijnt.';
-          form.reset();
-          fireConfetti();
+        fetch(SHEET_WEBHOOK_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: JSON.stringify({ email: email })
         })
-        .catch(function () {
-          note.textContent = 'Er ging iets mis. Probeer het later opnieuw.';
-        })
-        .finally(function () {
-          button.disabled = false;
-          button.textContent = 'Geef een seintje';
-        });
+          .then(function () {
+            note.textContent = 'Bedankt! We laten je weten zodra het boek verschijnt.';
+            form.reset();
+            fireConfetti();
+          })
+          .catch(function () {
+            note.textContent = 'Er ging iets mis. Probeer het later opnieuw.';
+          })
+          .finally(function () {
+            button.disabled = false;
+            button.textContent = 'Geef een seintje';
+          });
+      });
     });
   </script>
-
-  <img src="HVVB-mockup-1.jpg" alt="Het Verhaal van Bunnik" class="cover-image">
-
-  <section class="about">
-    <h2>3000 jaar terug in de tijd in Bunnik, Vechten, Rhijnauwen en Amelisweerd</h2>
-    <p>
-      Het verhaal van Bunnik gaat 3000 jaar terug in de tijd in Bunnik, Vechten, Rhijnauwen en Amelisweerd. Dit boek is een historische reconstructie en geeft een beeld van hoe hier alles is ontstaan en hoe het er in verschillende perioden heeft uitgezien.
-    </p>
-    <p>
-      Het verhaal van Bunnik is een verhaal van de rivier die lang haar eigen weg ging. Een verhaal van pioniers die zich vestigden op de hoger gelegen stroomruggen bij kruispunten van vaarwegen. Een verhaal van Romeinen die hier hun grootste castellum en haven bouwden. Een verhaal van de Utrechtse bisschoppen en de kerk. Een verhaal van de ontginningen. Een verhaal van ridderhofsteden en grootgrondbezitters. Een verhaal van hardwerkende boeren die hier een bestaan opbouwden en zorgden dat iedereen te eten had. Een verhaal van ambachtslieden en ondernemers. Een verhaal van een groeiend dorp dat toch een dorp bleef. Een verhaal in 400 pagina's, 15 hoofdstukken en ruim 500 afbeeldingen.
-    </p>
-  </section>
-
-  <section class="author-section">
-    <img src="pieter-van-de-vliet.jpg" alt="Pieter van de Vliet" class="author-photo">
-    <div class="author-text">
-      <blockquote class="quote">
-        "Hoe is dit alles ontstaan? Hoe was het hier vroeger? Van jongs af aan ben ik – mede dankzij inspirerende geschiedenisleraren – gefascineerd door deze vragen, net als kinderen die met verwondering door oude fotoboeken bladeren."
-        <cite>— Pieter van de Vliet</cite>
-      </blockquote>
-    </div>
-  </section>
 
 </body>
 </html>
