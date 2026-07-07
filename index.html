@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Het Verhaal van Bunnik – Pieter van de Vliet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #2a5c27;
+    --green-light: #3a7a35;
+    --cream: #f5f0eb;
+    --dark: #1a1a1a;
+    --mid: #555;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    line-height: 1.6;
+  }
+
+  .hero {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 88px 24px 72px;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: clamp(64px, 11vw, 116px);
+    line-height: 0.9;
+    text-transform: uppercase;
+    color: var(--dark);
+  }
+
+  .hero h1 .subtitle-line {
+    font-size: clamp(30px, 4.5vw, 50px);
+    font-weight: 700;
+    color: var(--green);
+    display: block;
+    margin-bottom: -4px;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: var(--mid);
+    margin: 24px auto 36px;
+    max-width: 520px;
+    line-height: 1.75;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(42, 92, 39, 0.1);
+    color: var(--green);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    border-radius: 80px;
+    margin-bottom: 24px;
+  }
+
+  .badge .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+
+  .signup {
+    display: flex;
+    justify-content: center;
+    margin-top: 36px;
+  }
+
+  .signup-form {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 80px;
+    padding: 6px;
+    gap: 6px;
+    max-width: 420px;
+    width: 100%;
+  }
+
+  .signup-form input[type="email"] {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    padding: 10px 18px;
+    color: var(--dark);
+    min-width: 0;
+  }
+
+  .signup-form input[type="email"]::placeholder { color: #999; }
+
+  .signup-form button {
+    flex-shrink: 0;
+    background: var(--green);
+    color: white;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 12px 26px;
+    border-radius: 80px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .signup-form button:hover { background: var(--green-light); }
+
+  .signup-note {
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--mid);
+  }
+
+  @media (max-width: 480px) {
+    .signup-form { border-radius: 20px; flex-wrap: wrap; }
+    .signup-form input[type="email"] { width: 100%; }
+    .signup-form button { width: 100%; }
+  }
+
+  .cover-image {
+    width: 100%;
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .hero { padding: 88px 20px 48px; }
+  }
+</style>
+</head>
+<body>
+
+  <section class="hero">
+    <span class="badge"><span class="dot"></span>Binnenkort beschikbaar</span>
+    <h1>
+      <span class="subtitle-line">Het verhaal van</span>
+      BUNNIK
+    </h1>
+    <p class="hero-sub">
+      3000 jaar terug in de tijd in Bunnik, Vechten, Rhijnauwen en Amelisweerd. Een boek over de rijke geschiedenis van een bijzondere plek.
+    </p>
+
+    <div class="signup">
+      <form class="signup-form" id="signup-form">
+        <input type="email" placeholder="Jouw e-mailadres" required>
+        <button type="submit">Inschrijven</button>
+      </form>
+    </div>
+    <p class="signup-note" id="signup-note">Ontvang een bericht zodra het boek verschijnt.</p>
+  </section>
+
+  <script>
+    // Vervang door je Google Apps Script Web App URL (eindigt op /exec)
+    var SHEET_WEBHOOK_URL = 'PLAK_HIER_JE_APPS_SCRIPT_URL';
+
+    document.getElementById('signup-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var form = this;
+      var note = document.getElementById('signup-note');
+      var email = form.querySelector('input[type="email"]').value;
+      var button = form.querySelector('button');
+
+      button.disabled = true;
+      button.textContent = 'Bezig...';
+
+      fetch(SHEET_WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify({ email: email })
+      })
+        .then(function () {
+          note.textContent = 'Bedankt! We laten je weten zodra het boek verschijnt.';
+          form.reset();
+        })
+        .catch(function () {
+          note.textContent = 'Er ging iets mis. Probeer het later opnieuw.';
+        })
+        .finally(function () {
+          button.disabled = false;
+          button.textContent = 'Inschrijven';
+        });
+    });
+  </script>
+
+  <img src="HVVB-mockup-2.jpg" alt="Het Verhaal van Bunnik" class="cover-image">
+
+</body>
+</html>
