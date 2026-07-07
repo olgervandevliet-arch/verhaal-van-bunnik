@@ -176,10 +176,6 @@
   }
 
   blockquote.quote {
-    margin: 32px 0 0;
-    padding: 24px 28px;
-    background: rgba(42, 92, 39, 0.06);
-    border-left: 3px solid var(--green);
     font-size: 17px;
     font-style: italic;
     color: var(--dark);
@@ -202,31 +198,18 @@
     display: grid;
     grid-template-columns: 220px 1fr;
     gap: 48px;
-    align-items: start;
+    align-items: center;
   }
 
   .author-photo {
     width: 220px;
-    aspect-ratio: 3/4;
-    object-fit: cover;
-    object-position: center 20%;
+    height: auto;
     border-radius: 4px;
     display: block;
   }
 
-  .author-text h2 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 32px;
-    line-height: 1.1;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-
-  .author-text p {
-    font-size: 15px;
-    color: var(--mid);
-    line-height: 1.75;
+  .author-text blockquote.quote {
+    margin: 0;
   }
 
   @media (max-width: 768px) {
@@ -312,8 +295,6 @@
   <section class="author-section">
     <img src="pieter-van-de-vliet.jpg" alt="Pieter van de Vliet" class="author-photo">
     <div class="author-text">
-      <p class="section-label">Over de auteur</p>
-      <h2>Pieter van de Vliet</h2>
       <blockquote class="quote">
         "Hoe is dit alles ontstaan? Hoe was het hier vroeger? Van jongs af aan ben ik – mede dankzij inspirerende geschiedenisleraren – gefascineerd door deze vragen, net als kinderen die met verwondering door oude fotoboeken bladeren."
         <cite>— Pieter van de Vliet</cite>
