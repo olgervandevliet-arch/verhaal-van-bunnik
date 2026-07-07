@@ -129,9 +129,31 @@
   .signup-form button:hover { background: var(--green-light); }
 
   .signup-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     margin-top: 14px;
     font-size: 13px;
     color: var(--mid);
+  }
+
+  .signup-note svg {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    color: var(--green);
+  }
+
+  @keyframes confetti-fall {
+    0% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 0.9;
+    }
+    100% {
+      transform: translateY(100vh) rotate(540deg);
+      opacity: 0;
+    }
   }
 
   @media (max-width: 480px) {
@@ -249,20 +271,48 @@
     <div class="signup">
       <form class="signup-form" id="signup-form">
         <input type="email" placeholder="Jouw e-mailadres" required>
-        <button type="submit">Inschrijven</button>
+        <button type="submit">Geef een seintje</button>
       </form>
     </div>
-    <p class="signup-note" id="signup-note">Ontvang een bericht zodra het boek verschijnt.</p>
+    <p class="signup-note" id="signup-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      <span id="signup-note-text">Ontvang een bericht zodra het boek verschijnt.</span>
+    </p>
   </section>
 
   <script>
     // Vervang door je Google Apps Script Web App URL (eindigt op /exec)
     var SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyp2JvAq5hBpMG81mKGsqxKlPpRhg8rG_RaXG8GVmN0MtH4dnSWotVy8Ztr1mSAU7VxkA/exec';
 
+    function fireConfetti() {
+      var colors = ['#2a5c27', '#3a7a35', '#1a1a1a', '#e8b84b', '#d4d4c8'];
+      var count = 60;
+      for (var i = 0; i < count; i++) {
+        var piece = document.createElement('div');
+        var size = 6 + Math.random() * 6;
+        piece.style.position = 'fixed';
+        piece.style.top = '-20px';
+        piece.style.left = (Math.random() * 100) + 'vw';
+        piece.style.width = size + 'px';
+        piece.style.height = (size * 0.4) + 'px';
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.opacity = '0.9';
+        piece.style.borderRadius = '1px';
+        piece.style.pointerEvents = 'none';
+        piece.style.zIndex = '9999';
+        piece.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+        piece.style.animation = 'confetti-fall ' + (2.5 + Math.random() * 1.5) + 's ease-in ' + (Math.random() * 0.3) + 's forwards';
+        document.body.appendChild(piece);
+        (function (el) {
+          setTimeout(function () { el.remove(); }, 4500);
+        })(piece);
+      }
+    }
+
     document.getElementById('signup-form').addEventListener('submit', function (e) {
       e.preventDefault();
       var form = this;
-      var note = document.getElementById('signup-note');
+      var note = document.getElementById('signup-note-text');
       var email = form.querySelector('input[type="email"]').value;
       var button = form.querySelector('button');
 
@@ -277,13 +327,14 @@
         .then(function () {
           note.textContent = 'Bedankt! We laten je weten zodra het boek verschijnt.';
           form.reset();
+          fireConfetti();
         })
         .catch(function () {
           note.textContent = 'Er ging iets mis. Probeer het later opnieuw.';
         })
         .finally(function () {
           button.disabled = false;
-          button.textContent = 'Inschrijven';
+          button.textContent = 'Geef een seintje';
         });
     });
   </script>
