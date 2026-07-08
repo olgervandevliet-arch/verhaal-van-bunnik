@@ -157,9 +157,7 @@
   }
 
   @media (max-width: 480px) {
-    .signup-form { border-radius: 20px; flex-wrap: wrap; }
-    .signup-form input[type="email"] { width: 100%; }
-    .signup-form button { width: 100%; }
+    .signup-form input[type="email"] { min-width: 0; }
   }
 
   .cover-image {
@@ -199,7 +197,7 @@
   }
 
   blockquote.quote {
-    font-size: 17px;
+    font-size: 19px;
     font-style: italic;
     color: var(--dark);
     line-height: 1.7;
@@ -260,6 +258,7 @@
   @media (max-width: 768px) {
     .hero { padding: 88px 20px 48px; }
     .about { padding: 56px 20px; }
+    .about h2 { font-size: 38px; }
     .author-section {
       grid-template-columns: 1fr;
       margin: 0 20px 64px;
@@ -268,8 +267,14 @@
       text-align: center;
     }
     .author-text { padding: 32px 16px; }
-    .author-photo { width: 200px; margin: 0 auto; }
+    .author-photo { width: 100%; margin: 0 auto; }
     .cta-section { padding: 24px 20px 80px; }
+  }
+
+  @media (max-width: 480px) {
+    .hero h1 { font-size: clamp(112px, 27vw, 150px); }
+    .hero h1 .subtitle-line { font-size: clamp(36px, 8.5vw, 46px); }
+    .sub-break { display: none; }
   }
 </style>
 </head>
@@ -282,7 +287,7 @@
       BUNNIK
     </h1>
     <p class="hero-sub">
-      3000 jaar terug in de tijd in Bunnik, Vechten,<br>Rhijnauwen en Amelisweerd
+      3000 jaar terug in de tijd in Bunnik, Vechten, <br class="sub-break">Rhijnauwen en Amelisweerd
     </p>
 
     <div class="signup">
@@ -337,6 +342,20 @@
     // Vervang door je Google Apps Script Web App URL (eindigt op /exec)
     var SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyp2JvAq5hBpMG81mKGsqxKlPpRhg8rG_RaXG8GVmN0MtH4dnSWotVy8Ztr1mSAU7VxkA/exec';
 
+    function ctaLabel() {
+      return window.innerWidth <= 480 ? 'Geef seintje' : 'Geef een seintje';
+    }
+
+    document.querySelectorAll('.signup-form button').forEach(function (button) {
+      button.textContent = ctaLabel();
+    });
+
+    window.addEventListener('resize', function () {
+      document.querySelectorAll('.signup-form button').forEach(function (button) {
+        if (!button.disabled) button.textContent = ctaLabel();
+      });
+    });
+
     function fireConfetti() {
       var colors = ['#2a5c27', '#3a7a35', '#1a1a1a', '#e8b84b', '#d4d4c8'];
       var count = 60;
@@ -387,7 +406,7 @@
           })
           .finally(function () {
             button.disabled = false;
-            button.textContent = 'Geef een seintje';
+            button.textContent = ctaLabel();
           });
       });
     });
