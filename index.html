@@ -86,56 +86,31 @@
     margin-top: 36px;
   }
 
-  .signup-form {
-    display: flex;
-    align-items: center;
-    background: white;
-    border: 1px solid rgba(0,0,0,0.1);
-    border-radius: 80px;
-    padding: 6px;
-    gap: 6px;
-    max-width: 420px;
-    width: 100%;
-  }
-
-  .signup-form input[type="email"] {
-    flex: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    padding: 10px 18px;
-    color: var(--dark);
-    min-width: 0;
-  }
-
-  .signup-form input[type="email"]::placeholder { color: #999; }
-
-  .signup-form button {
-    flex-shrink: 0;
+  .order-button {
+    display: inline-block;
     background: var(--green);
     color: white;
-    border: none;
+    text-decoration: none;
     font-family: 'Inter', sans-serif;
     font-weight: 600;
-    font-size: 15px;
-    padding: 12px 26px;
+    font-size: 16px;
+    padding: 16px 40px;
     border-radius: 80px;
-    cursor: pointer;
     transition: background 0.2s;
   }
 
-  .signup-form button:hover { background: var(--green-light); }
+  .order-button:hover { background: var(--green-light); }
 
   .signup-note {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    margin-top: 14px;
+    max-width: 440px;
+    margin: 14px auto 0;
     font-size: 13px;
     color: var(--mid);
+    text-align: left;
   }
 
   .signup-note svg {
@@ -143,21 +118,6 @@
     width: 16px;
     height: 16px;
     color: var(--green);
-  }
-
-  @keyframes confetti-fall {
-    0% {
-      transform: translateY(0) rotate(0deg);
-      opacity: 0.9;
-    }
-    100% {
-      transform: translateY(100vh) rotate(540deg);
-      opacity: 0;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .signup-form input[type="email"] { min-width: 0; }
   }
 
   .cover-image {
@@ -276,6 +236,7 @@
     .hero h1 .subtitle-line { font-size: clamp(36px, 8.5vw, 46px); }
     .sub-break { display: none; }
     .hero-sub { margin-top: 12px; }
+    .order-button { display: block; width: 100%; text-align: center; }
     .cover-image {
       aspect-ratio: 2 / 3;
       object-fit: cover;
@@ -288,7 +249,7 @@
 <body>
 
   <section class="hero">
-    <span class="badge"><span class="dot"></span>Binnenkort beschikbaar</span>
+    <span class="badge"><span class="dot"></span>Beschikbaar</span>
     <h1>
       <span class="subtitle-line">Het verhaal van</span>
       BUNNIK
@@ -298,14 +259,11 @@
     </p>
 
     <div class="signup">
-      <form class="signup-form">
-        <input type="email" placeholder="Jouw e-mailadres" required>
-        <button type="submit">Geef een seintje</button>
-      </form>
+      <a class="order-button" href="https://libris.nl/ravenswaay/a/het-verhaal-van-bunnik/9789083246420" target="_blank" rel="noopener">Boek bestellen</a>
     </div>
     <p class="signup-note">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-      <span class="signup-note-text">Ontvang een bericht zodra het boek verschijnt.</span>
+      <span>Het verhaal van Bunnik is verkrijgbaar bij de Bunnikse boekhandel Van Ravenswaay.</span>
     </p>
   </section>
 
@@ -334,90 +292,14 @@
   <section class="cta-section">
     <h2>Wil je weten wanneer het boek verschijnt?</h2>
     <div class="signup">
-      <form class="signup-form">
-        <input type="email" placeholder="Jouw e-mailadres" required>
-        <button type="submit">Geef een seintje</button>
-      </form>
+      <a class="order-button" href="https://libris.nl/ravenswaay/a/het-verhaal-van-bunnik/9789083246420" target="_blank" rel="noopener">Boek bestellen</a>
     </div>
     <p class="signup-note">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-      <span class="signup-note-text">Ontvang een bericht zodra het boek verschijnt.</span>
+      <span>Het verhaal van Bunnik is verkrijgbaar bij de Bunnikse boekhandel Van Ravenswaay.</span>
     </p>
   </section>
 
-  <script>
-    // Vervang door je Google Apps Script Web App URL (eindigt op /exec)
-    var SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyp2JvAq5hBpMG81mKGsqxKlPpRhg8rG_RaXG8GVmN0MtH4dnSWotVy8Ztr1mSAU7VxkA/exec';
-
-    function ctaLabel() {
-      return window.innerWidth <= 480 ? 'Geef seintje' : 'Geef een seintje';
-    }
-
-    document.querySelectorAll('.signup-form button').forEach(function (button) {
-      button.textContent = ctaLabel();
-    });
-
-    window.addEventListener('resize', function () {
-      document.querySelectorAll('.signup-form button').forEach(function (button) {
-        if (!button.disabled) button.textContent = ctaLabel();
-      });
-    });
-
-    function fireConfetti() {
-      var colors = ['#2a5c27', '#3a7a35', '#1a1a1a', '#e8b84b', '#d4d4c8'];
-      var count = 60;
-      for (var i = 0; i < count; i++) {
-        var piece = document.createElement('div');
-        var size = 6 + Math.random() * 6;
-        piece.style.position = 'fixed';
-        piece.style.top = '-20px';
-        piece.style.left = (Math.random() * 100) + 'vw';
-        piece.style.width = size + 'px';
-        piece.style.height = (size * 0.4) + 'px';
-        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-        piece.style.opacity = '0.9';
-        piece.style.borderRadius = '1px';
-        piece.style.pointerEvents = 'none';
-        piece.style.zIndex = '9999';
-        piece.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
-        piece.style.animation = 'confetti-fall ' + (2.5 + Math.random() * 1.5) + 's ease-in ' + (Math.random() * 0.3) + 's forwards';
-        document.body.appendChild(piece);
-        (function (el) {
-          setTimeout(function () { el.remove(); }, 4500);
-        })(piece);
-      }
-    }
-
-    document.querySelectorAll('.signup-form').forEach(function (form) {
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var note = form.parentElement.nextElementSibling.querySelector('.signup-note-text');
-        var email = form.querySelector('input[type="email"]').value;
-        var button = form.querySelector('button');
-
-        button.disabled = true;
-        button.textContent = 'Bezig...';
-
-        fetch(SHEET_WEBHOOK_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          body: JSON.stringify({ email: email })
-        })
-          .then(function () {
-            note.textContent = 'Bedankt! We laten je weten zodra het boek verschijnt.';
-            form.reset();
-            fireConfetti();
-          })
-          .catch(function () {
-            note.textContent = 'Er ging iets mis. Probeer het later opnieuw.';
-          })
-          .finally(function () {
-            button.disabled = false;
-            button.textContent = ctaLabel();
-          });
-      });
-    });
-  </script>
 
 </body>
 </html>
